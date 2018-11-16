@@ -17,7 +17,7 @@ const pass=process.env.PASSWORD;
 let transporter = nodemailer.createTransport({
   host: "smtp.163.com",
   port: 25,
-  secure: false, // true for 465, false for other ports
+  secure: true, // true for 465, false for other ports
   auth: {
     user, 
     pass 
