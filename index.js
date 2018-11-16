@@ -11,21 +11,22 @@ const headers = {
 const config = {
   headers
 };
-const user=process.env.SENDER;
-const pass=process.env.PASSWORD;
-const host=process.env.MAIL_HOST;
-const port=process.env.MAIL_PORT;
+const user = process.env.SENDER;
+const pass = process.env.PASSWORD;
+const host = process.env.MAIL_HOST;
+const port = process.env.MAIL_PORT;
+const secure = process.env.SECURE;
 
 let transporter = nodemailer.createTransport({
   host,
-  port, 
-  secure: false,
+  port,
+  secure,
   auth: {
-    user, 
-    pass 
+    user,
+    pass
   }
 });
-const from = `"Cyan Pub👻"`;
+const from = user;
 let mailOptions = {
   from,
   to: "461354294@qq.com"
