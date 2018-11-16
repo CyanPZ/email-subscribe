@@ -11,10 +11,8 @@ const headers = {
 const config = {
   headers
 };
-
 const user=process.env.SENDER;
 const pass=process.env.PASSWORD;
-console.log(process.env)
 
 let transporter = nodemailer.createTransport({
   host: "smtp.163.com",
