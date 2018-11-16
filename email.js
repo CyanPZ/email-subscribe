@@ -17,7 +17,7 @@ let transporter = nodemailer.createTransport({
 const from = user;
 let mailOptions = {
   from,
-  to: "461354294@qq.com"
+  to: "461354294@qq.com,631492609@qq.com",
 };
 /**
  *
