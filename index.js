@@ -1,7 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-const nodemailer = require("nodemailer");
-
+const { sendEmail } = require("./email");
 const baseUrl = "https://github.com";
 const headers = {
   "X-Requested-With": "XMLHttpRequest",
@@ -11,61 +10,41 @@ const headers = {
 const config = {
   headers
 };
-const user = process.env.SENDER;
-const pass = process.env.PASSWORD;
-const host = process.env.MAIL_HOST;
-const port = process.env.MAIL_PORT;
-const secure = process.env.SECURE;
+/**
+ * 获取内容并发送邮件
+ */
+const fetchAndSend = () => {
+  let latestIssue = "";
+  let num = "";
+  axios
+    .get("https://github.com/ruanyf/weekly", config)
+    .then(res => {
+      const url = res.data.match('<a href="(.*?.md)">(.*?)</a>');
+      latestIssue = baseUrl + url[1];
+      num = url[2];
+      return axios.get(latestIssue, config);
+    })
+    .then(res => {
+      const $ = cheerio.load(res.data);
+      const article = $("article").html();
+      const subject = `📅阮一峰技术周刊${num}`;
+      const content = `<html lang="en">
+      <head>
+          <meta charset="UTF-8">
+      </head>
+      <body>
+          <div>
+              <a href="${latestIssue}">${subject}</a>
+              ${article}
+          <div>
+      </body>
+      </html>`;
+      sendEmail(content, subject);
+    })
+    .catch(console.log);
+};
 
-let transporter = nodemailer.createTransport({
-  host,
-  port,
-  secure,
-  auth: {
-    user,
-    pass
-  }
-});
-const from = user;
-let mailOptions = {
-  from,
-  to: "461354294@qq.com"
-};
-const sendEmail = (content, subject) => {
-  mailOptions.html = content;
-  mailOptions.subject = subject;
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return console.log(error);
-    }
-    console.log("Message sent: %s", info.messageId);
-  });
-};
-let latestIssue = "";
-let num = "";
-axios
-  .get("https://github.com/ruanyf/weekly", config)
-  .then(res => {
-    const url = res.data.match('<a href="(.*?.md)">(.*?)</a>');
-    latestIssue = baseUrl + url[1];
-    num = url[2];
-    return axios.get(latestIssue, config);
-  })
-  .then(res => {
-    const $ = cheerio.load(res.data);
-    const article = $("article").html();
-    const subject = `📅阮一峰技术周刊${num}`;
-    const content = `<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <div>
-            <a href="${latestIssue}">${subject}</a>
-            ${article}
-        <div>
-    </body>
-    </html>`;
-    sendEmail(content, subject);
-  })
-  .catch(console.log);
+const day = new Date().getDay();
+if (day === 6) {
+  fetchAndSend();
+}
