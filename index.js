@@ -16,11 +16,6 @@ const pass=process.env.PASSWORD;
 const host=process.env.MAIL_HOST;
 const port=process.env.MAIL_PORT;
 
-console.log(user)
-console.log(pass)
-console.log(host)
-console.log(port)
-
 let transporter = nodemailer.createTransport({
   host,
   port, 
