@@ -1,11 +1,14 @@
 language: node_js
+node_js:
+  - node
+before_install:
+  - npm install
+script:
+  - node index.js
+
 notifications:
   email:
     recipients:
       - 461354294@qq.com
     on_success: change # default: change
     on_failure: always # default: always
-before_install:
-  - npm install
-script:
-  - node index.js
