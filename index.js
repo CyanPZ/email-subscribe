@@ -13,10 +13,12 @@ const config = {
 };
 const user=process.env.SENDER;
 const pass=process.env.PASSWORD;
+const host=process.env.MAIL_HOST;
+const port=process.env.MAIL_PORT;
 
 let transporter = nodemailer.createTransport({
-  host: "smtp.163.com",
-  port: 25,
+  host,
+  port,
   secure: true, // true for 465, false for other ports
   auth: {
     user, 
