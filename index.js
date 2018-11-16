@@ -16,16 +16,21 @@ const pass=process.env.PASSWORD;
 const host=process.env.MAIL_HOST;
 const port=process.env.MAIL_PORT;
 
+console.log(user)
+console.log(pass)
+console.log(host)
+console.log(port)
+
 let transporter = nodemailer.createTransport({
   host,
-  port,
-  secure: true, // true for 465, false for other ports
+  port, 
+  secure: false,
   auth: {
     user, 
     pass 
   }
 });
-const from = '"Cyan Pub👻" <cpz_github_pub@163.com>';
+const from = `"Cyan Pub👻"`;
 let mailOptions = {
   from,
   to: "461354294@qq.com"
